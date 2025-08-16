@@ -4,6 +4,11 @@ from rest_framework.response import Response
 
 
 # Create your views here.
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def hello(request):
-    return Response({"message": "Hello World!"})
+    if request.method == "GET":
+        message = "Hello World by GET method"
+    else:
+        message = "Hello World by POST method"
+
+    return Response({"message": message})
