@@ -51,20 +51,20 @@ class ItemListView(APIView):
 
 
 class ItemDetailView(APIView):
-    def get(self, request, pk):
+    def get_item(self, pk):
         try:
             item = Item.objects.get(id=pk)
         except Item.DoesNotExist:
             raise Http404
 
+        return item
+
+    def get(self, request, pk):
+        item = self.get_item(pk)
         serializer = ItemSerializer(item)
         return Response(serializer.data)
 
     def delete(self, request, pk):
-        try:
-            item = Item.objects.get(id=pk)
-        except Item.DoesNotExist:
-            raise Http404
-
+        item = self.get_item(pk)
         item.delete()
         return Response({"delete": "done"}, status=204)
