@@ -37,10 +37,15 @@ class ItemListView(APIView):
 
     def post(self, request):
         serializer = ItemSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=400)
+        ## Basic Usage
+        # if not serializer.is_valid():
+        #     return Response(serializer.errors, status=400)
 
-        Item.objects.create(**serializer.validated_data)
+        # Item.objects.create(**serializer.validated_data)
+
+        ## Advanced Usage
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         return Response({"status": "ok", **serializer.validated_data}, status=201)
 
