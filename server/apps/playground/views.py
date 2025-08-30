@@ -23,3 +23,8 @@ class HiView(APIView):
 
     def post(self, request):
         return Response({"message": self._customMsg("POST")})
+
+
+class ItemListView(APIView):
+    def get(self, request):
+        return Response({"message": "oh u got it"})
