@@ -68,3 +68,12 @@ class ItemDetailView(APIView):
         item = self.get_item(pk)
         item.delete()
         return Response({"delete": "done"}, status=204)
+
+    def put(self, request, pk):
+        item = self.get_item(pk)
+
+        serializer = ItemSerializer(item, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
