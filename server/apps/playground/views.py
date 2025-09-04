@@ -1,6 +1,6 @@
 from django.http import Http404
 from rest_framework.decorators import api_view
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -53,17 +53,24 @@ class HiView(APIView):
 #         return Response({"status": "ok", **serializer.data}, status=201)
 
 
-# Version 2
-class ItemListView(CreateModelMixin, ListModelMixin, GenericAPIView):
+# # Version 2
+# class ItemListView(CreateModelMixin, ListModelMixin, GenericAPIView):
+#     # The variable name is fixed.
+#     serializer_class = ItemSerializer
+#     queryset = Item.objects.all()
+
+#     def get(self, request):
+#         return self.list(request)
+
+#     def post(self, request):
+#         return self.create(request)
+
+
+# Version 3
+class ItemListView(ListCreateAPIView):
     # The variable name is fixed.
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
-
-    def get(self, request):
-        return self.list(request)
-
-    def post(self, request):
-        return self.create(request)
 
 
 class ItemDetailView(APIView):
