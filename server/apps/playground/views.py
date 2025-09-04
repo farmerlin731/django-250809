@@ -1,5 +1,7 @@
 from django.http import Http404
 from rest_framework.decorators import api_view
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -29,25 +31,39 @@ class HiView(APIView):
         return Response({"message": self._customMsg("POST")})
 
 
-class ItemListView(APIView):
+# # Version 1
+# class ItemListView(APIView):
+#     def get(self, request):
+#         items = Item.objects.all()
+#         serializer = ItemSerializer(items, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request):
+#         serializer = ItemSerializer(data=request.data)
+#         ## Basic Usage
+#         # if not serializer.is_valid():
+#         #     return Response(serializer.errors, status=400)
+
+#         # Item.objects.create(**serializer.validated_data)
+
+#         ## Advanced Usage
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+
+#         return Response({"status": "ok", **serializer.data}, status=201)
+
+
+# Version 2
+class ItemListView(CreateModelMixin, ListModelMixin, GenericAPIView):
+    # The variable name is fixed.
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+
     def get(self, request):
-        items = Item.objects.all()
-        serializer = ItemSerializer(items, many=True)
-        return Response(serializer.data)
+        return self.list(request)
 
     def post(self, request):
-        serializer = ItemSerializer(data=request.data)
-        ## Basic Usage
-        # if not serializer.is_valid():
-        #     return Response(serializer.errors, status=400)
-
-        # Item.objects.create(**serializer.validated_data)
-
-        ## Advanced Usage
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response({"status": "ok", **serializer.validated_data}, status=201)
+        return self.create(request)
 
 
 class ItemDetailView(APIView):
