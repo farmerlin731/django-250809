@@ -77,3 +77,12 @@ class ItemDetailView(APIView):
         serializer.save()
 
         return Response(serializer.data)
+
+    def patch(self, request, pk):
+        item = self.get_item(pk)
+
+        serializer = ItemSerializer(item, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
