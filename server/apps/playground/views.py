@@ -1,4 +1,5 @@
 from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import (
@@ -150,7 +151,9 @@ class ItemViewSet(ModelViewSet):
     filter_backends = [  # 允許被使用的 filter 種類
         OrderingFilter,  # 排序型的 filter
         SearchFilter,  # 搜尋型的 filter
+        DjangoFilterBackend,  # 特定欄位的 filter
     ]
     ordering_fields = ["name", "id"]  # 排序型的 filter 允許使用者指定的欄位有哪些
     ordering = ["id"]  # 如果使用者沒有指定的話排序型 filter 要用來排序的欄位
     search_fields = ["name", "description"]  # 關鍵字要在哪些欄位中被搜尋 #search
+    filterset_fields = ["is_active", "name"]
