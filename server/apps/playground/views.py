@@ -8,6 +8,7 @@ from rest_framework.generics import (
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from server.apps.playground.models import Item
 from server.apps.playground.serializers import ItemSerializer
@@ -133,5 +134,11 @@ class ItemListView(ListCreateAPIView):
 
 ## Version 3 - RetrieveUpdateDestroyAPIView
 class ItemDetailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+
+
+## Version 4 - Final ! ViewSet!
+class ItemViewSet(ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
