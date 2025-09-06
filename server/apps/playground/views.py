@@ -76,38 +76,39 @@ class ItemListView(ListCreateAPIView):
 # class ItemDetailView(APIView): # Version 1
 class ItemDetailView(GenericAPIView):  # Version 2
     serializer_class = ItemSerializer
+    queryset = Item.objects.all()  # Version 2
+    # # Version 1
+    # def get_item(self, pk):
+    #     try:
+    #         item = Item.objects.get(id=pk)
+    #     except Item.DoesNotExist:
+    #         raise Http404
 
-    def get_item(self, pk):
-        try:
-            item = Item.objects.get(id=pk)
-        except Item.DoesNotExist:
-            raise Http404
-
-        return item
+    #     return item
 
     def get(self, request, pk):
-        item = self.get_item(pk)
-        # serializer = ItemSerializer(item) # Version 1
-        serializer = self.get_serializer(item)  # Version 2
+        # item = self.get_item(pk)  # Version 1 - APIView
+        item = self.get_object()  # Version 2 - GenericAPIView
+        # serializer = ItemSerializer(item) # Version 1 - APIView
+        serializer = self.get_serializer(item)  # Version 2 - GenericAPIView
         return Response(serializer.data)
 
     def delete(self, request, pk):
-        item = self.get_item(pk)
+        item = self.get_object()
         item.delete()
         return Response({"delete": "done"}, status=204)
 
     def put(self, request, pk):
-        item = self.get_item(pk)
+        item = self.get_object()
 
-        # serializer = ItemSerializer(item, data=request.data) # Version 1
-        serializer = self.get_serializer(item, data=request.data)  # Version 2
+        serializer = self.get_serializer(item, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(serializer.data)
 
     def patch(self, request, pk):
-        item = self.get_item(pk)
+        item = self.get_object()
 
         serializer = self.get_serializer(item, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
