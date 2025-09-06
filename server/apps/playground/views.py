@@ -156,4 +156,13 @@ class ItemViewSet(ModelViewSet):
     ordering_fields = ["name", "id"]  # 排序型的 filter 允許使用者指定的欄位有哪些
     ordering = ["id"]  # 如果使用者沒有指定的話排序型 filter 要用來排序的欄位
     search_fields = ["name", "description"]  # 關鍵字要在哪些欄位中被搜尋 #search
-    filterset_fields = ["is_active", "name"]
+    filterset_fields = {
+        "is_active": ["exact"],
+        "name": ["exact", "contains"],
+        "id": [
+            "gt",  # >
+            "gte",  # >=
+            "lt",  # <
+            "lte",  # <=
+        ],
+    }
