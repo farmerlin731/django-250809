@@ -13,6 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from server.apps.playground.models import Item
 from server.apps.playground.serializers import ItemSerializer
+from server.utils.pagination import PageNumberWithSizePagination
 
 
 # Create your views here.
@@ -142,5 +143,5 @@ class ItemDetailView(RetrieveUpdateDestroyAPIView):
 ## Version 4 - Final ! ViewSet!
 class ItemViewSet(ModelViewSet):
     serializer_class = ItemSerializer
-    queryset = Item.objects.all()
-    pagination_class = PageNumberPagination
+    queryset = Item.objects.order_by("id")
+    pagination_class = PageNumberWithSizePagination
