@@ -1,6 +1,10 @@
 from django.http import Http404
 from rest_framework.decorators import api_view
-from rest_framework.generics import GenericAPIView, ListCreateAPIView
+from rest_framework.generics import (
+    GenericAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -73,54 +77,61 @@ class ItemListView(ListCreateAPIView):
     queryset = Item.objects.all()
 
 
-# class ItemDetailView(APIView): # Version 1
-class ItemDetailView(GenericAPIView, RetrieveModelMixin):  # Version 2
+# # Use Generic & Mixin
+# # class ItemDetailView(APIView): # Version 1
+# class ItemDetailView(GenericAPIView, RetrieveModelMixin):  # Version 2
+#     serializer_class = ItemSerializer
+#     queryset = Item.objects.all()  # Version 2
+#     # # Version 1 - APIView
+#     # def get_item(self, pk):
+#     #     try:
+#     #         item = Item.objects.get(id=pk)
+#     #     except Item.DoesNotExist:
+#     #         raise Http404
+
+#     #     return item
+
+#     # Version 1 - APIView
+#     # def get(self, request, pk):
+#     #     item = self.get_item(pk)
+#     #     serializer = ItemSerializer(item)
+#     #     return Response(serializer.data)
+
+#     # Version 2 - GenericAPIView
+#     # def get(self, request, pk):
+#     #     item = self.get_object()
+#     #     serializer = self.get_serializer(item)
+#     #     return Response(serializer.data)
+
+#     # Version 3 - GenericAPIView + RetrieveModelMixin
+#     def get(self, request, pk):
+#         return self.retrieve(request, pk)
+
+#     def delete(self, request, pk):
+#         item = self.get_object()
+#         item.delete()
+#         return Response({"delete": "done"}, status=204)
+
+#     def put(self, request, pk):
+#         item = self.get_object()
+
+#         serializer = self.get_serializer(item, data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+
+#         return Response(serializer.data)
+
+#     def patch(self, request, pk):
+#         item = self.get_object()
+
+#         serializer = self.get_serializer(item, data=request.data, partial=True)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+
+#         return Response(serializer.data)
+
+
+## Version 3 - RetrieveUpdateDestroyAPIView
+class ItemDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = ItemSerializer
-    queryset = Item.objects.all()  # Version 2
-    # # Version 1 - APIView
-    # def get_item(self, pk):
-    #     try:
-    #         item = Item.objects.get(id=pk)
-    #     except Item.DoesNotExist:
-    #         raise Http404
-
-    #     return item
-
-    # Version 1 - APIView
-    # def get(self, request, pk):
-    #     item = self.get_item(pk)
-    #     serializer = ItemSerializer(item)
-    #     return Response(serializer.data)
-
-    # Version 2 - GenericAPIView
-    # def get(self, request, pk):
-    #     item = self.get_object()
-    #     serializer = self.get_serializer(item)
-    #     return Response(serializer.data)
-
-    # Version 3 - GenericAPIView + RetrieveModelMixin
-    def get(self, request, pk):
-        return self.retrieve(request, pk)
-
-    def delete(self, request, pk):
-        item = self.get_object()
-        item.delete()
-        return Response({"delete": "done"}, status=204)
-
-    def put(self, request, pk):
-        item = self.get_object()
-
-        serializer = self.get_serializer(item, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
-
-    def patch(self, request, pk):
-        item = self.get_object()
-
-        serializer = self.get_serializer(item, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
+    queryset = Item.objects.all()
