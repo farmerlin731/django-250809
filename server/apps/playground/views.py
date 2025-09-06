@@ -1,7 +1,7 @@
 from django.http import Http404
 from rest_framework.decorators import api_view
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -74,10 +74,10 @@ class ItemListView(ListCreateAPIView):
 
 
 # class ItemDetailView(APIView): # Version 1
-class ItemDetailView(GenericAPIView):  # Version 2
+class ItemDetailView(GenericAPIView, RetrieveModelMixin):  # Version 2
     serializer_class = ItemSerializer
     queryset = Item.objects.all()  # Version 2
-    # # Version 1
+    # # Version 1 - APIView
     # def get_item(self, pk):
     #     try:
     #         item = Item.objects.get(id=pk)
@@ -86,12 +86,21 @@ class ItemDetailView(GenericAPIView):  # Version 2
 
     #     return item
 
+    # Version 1 - APIView
+    # def get(self, request, pk):
+    #     item = self.get_item(pk)
+    #     serializer = ItemSerializer(item)
+    #     return Response(serializer.data)
+
+    # Version 2 - GenericAPIView
+    # def get(self, request, pk):
+    #     item = self.get_object()
+    #     serializer = self.get_serializer(item)
+    #     return Response(serializer.data)
+
+    # Version 3 - GenericAPIView + RetrieveModelMixin
     def get(self, request, pk):
-        # item = self.get_item(pk)  # Version 1 - APIView
-        item = self.get_object()  # Version 2 - GenericAPIView
-        # serializer = ItemSerializer(item) # Version 1 - APIView
-        serializer = self.get_serializer(item)  # Version 2 - GenericAPIView
-        return Response(serializer.data)
+        return self.retrieve(request, pk)
 
     def delete(self, request, pk):
         item = self.get_object()
