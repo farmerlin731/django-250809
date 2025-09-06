@@ -73,7 +73,10 @@ class ItemListView(ListCreateAPIView):
     queryset = Item.objects.all()
 
 
-class ItemDetailView(APIView):
+# class ItemDetailView(APIView): # Version 1
+class ItemDetailView(GenericAPIView):  # Version 2
+    serializer_class = ItemSerializer
+
     def get_item(self, pk):
         try:
             item = Item.objects.get(id=pk)
@@ -84,7 +87,8 @@ class ItemDetailView(APIView):
 
     def get(self, request, pk):
         item = self.get_item(pk)
-        serializer = ItemSerializer(item)
+        # serializer = ItemSerializer(item) # Version 1
+        serializer = self.get_serializer(item)  # Version 2
         return Response(serializer.data)
 
     def delete(self, request, pk):
@@ -95,7 +99,8 @@ class ItemDetailView(APIView):
     def put(self, request, pk):
         item = self.get_item(pk)
 
-        serializer = ItemSerializer(item, data=request.data)
+        # serializer = ItemSerializer(item, data=request.data) # Version 1
+        serializer = self.get_serializer(item, data=request.data)  # Version 2
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -104,7 +109,7 @@ class ItemDetailView(APIView):
     def patch(self, request, pk):
         item = self.get_item(pk)
 
-        serializer = ItemSerializer(item, data=request.data, partial=True)
+        serializer = self.get_serializer(item, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
