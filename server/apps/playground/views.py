@@ -145,3 +145,4 @@ class ItemViewSet(ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.order_by("id")
     pagination_class = PageNumberWithSizePagination
+    page_size = 5
