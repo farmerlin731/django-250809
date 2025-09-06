@@ -6,6 +6,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -142,3 +143,4 @@ class ItemDetailView(RetrieveUpdateDestroyAPIView):
 class ItemViewSet(ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
+    pagination_class = PageNumberPagination
