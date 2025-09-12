@@ -144,8 +144,11 @@ class ItemDetailView(RetrieveUpdateDestroyAPIView):
 
 ## Version 4 - Final ! ViewSet!
 class ItemViewSet(ModelViewSet):
-    serializer_class = ItemSerializer
-    queryset = Item.objects.all()
+    # serializer_class = ItemSerializer
+    serializer_class = ItemWithCommentSerializer
+    # queryset = Item.objects.all()
+    queryset = Item.objects.prefetch_related("comments")  # Solve N+1 problem!
+
     pagination_class = PageNumberWithSizePagination
     page_size = 5
     filter_backends = [  # 允許被使用的 filter 種類
@@ -168,8 +171,8 @@ class ItemViewSet(ModelViewSet):
     }
 
     # Check if the API is for list or detail.
-    def get_serializer_class(self):
-        if self.action == "retrieve":
-            return ItemWithCommentSerializer
+    # def get_serializer_class(self):
+    #     if self.action == "retrieve":
+    #         return ItemWithCommentSerializer
 
-        return super().get_serializer_class()
+    #     return super().get_serializer_class()
