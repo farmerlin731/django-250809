@@ -38,6 +38,15 @@ class ItemSerializer(serializers.ModelSerializer):
 
 # CRUD Comments
 class ItemCommentSerializer(serializers.ModelSerializer):
+    # For Write
+    item_id = serializers.PrimaryKeyRelatedField(
+        source="item",
+        queryset=Item.objects.all(),
+        write_only=True,
+    )
+    # For Read
+    item = ItemSerializer(read_only=True)
+
     class Meta:
         model = ItemComment
-        fields = ("id", "content", "item", "created_at", "updated_at")
+        fields = ("id", "content", "item", "item_id", "created_at", "updated_at")
