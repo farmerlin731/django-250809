@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from server.apps.playground.views import (
     HiView,
+    ItemCommentViewSet,
     ItemDetailView,
     ItemListView,
     ItemViewSet,  # Version 4 - include list & detail
@@ -13,6 +14,8 @@ router = DefaultRouter(trailing_slash=False)
 # When u meet 'viewset'
 # U should register router by this way
 router.register("items-v2", ItemViewSet)
+router.register("item-comments", ItemCommentViewSet)
+
 
 urlpatterns = [
     path("hello", hello),

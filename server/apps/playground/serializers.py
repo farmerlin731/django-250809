@@ -34,3 +34,10 @@ class ItemSerializer(serializers.ModelSerializer):
             "description",
             "is_active",
         )
+
+
+# CRUD Comments
+class ItemCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemComment
+        fields = ("id", "content", "item", "created_at", "updated_at")
