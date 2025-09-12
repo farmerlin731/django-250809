@@ -9,9 +9,28 @@ class ItemCommentInItemSerializer(serializers.ModelSerializer):
         fields = ("id", "content", "created_at", "updated_at")
 
 
-class ItemSerializer(serializers.ModelSerializer):
+# Comments @ detail.
+class ItemWithCommentSerializer(serializers.ModelSerializer):
     comments = ItemCommentInItemSerializer(read_only=True, many=True)
 
     class Meta:
         model = Item
-        fields = ("id", "name", "description", "is_active", "comments")
+        fields = (
+            "id",
+            "name",
+            "description",
+            "is_active",
+            "comments",
+        )
+
+
+# No comments.
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = (
+            "id",
+            "name",
+            "description",
+            "is_active",
+        )

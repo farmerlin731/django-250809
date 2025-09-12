@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from server.apps.playground.models import Item
-from server.apps.playground.serializers import ItemSerializer
+from server.apps.playground.serializers import ItemSerializer, ItemWithCommentSerializer
 from server.utils.pagination import PageNumberWithSizePagination
 
 
@@ -166,3 +166,10 @@ class ItemViewSet(ModelViewSet):
             "lte",  # <=
         ],
     }
+
+    # Check if the API is for list or detail.
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return ItemWithCommentSerializer
+
+        return super().get_serializer_class()
