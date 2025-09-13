@@ -9,6 +9,7 @@ from rest_framework.generics import (
 )
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -200,3 +201,5 @@ class ItemCommentViewSet(ModelViewSet):
         "item__is_active": ["exact"],
         "item__name": ["exact", "contains"],
     }
+
+    permission_classes = [IsAuthenticatedOrReadOnly]

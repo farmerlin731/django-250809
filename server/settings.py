@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third Party APPs
     "rest_framework",
+    "rest_framework.authtoken",
     "django_extensions",
     "django_filters",
     "drf_spectacular",
@@ -143,6 +144,12 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 # Swagger API
