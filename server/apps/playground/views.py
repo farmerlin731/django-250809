@@ -183,5 +183,7 @@ class ItemViewSet(ModelViewSet):
 
 
 class ItemCommentViewSet(ModelViewSet):
-    queryset = ItemComment.objects.all()
+    # queryset = ItemComment.objects.all()
+    queryset = ItemComment.objects.select_related("item")
+
     serializer_class = ItemCommentSerializer
